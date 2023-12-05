@@ -1,0 +1,35 @@
+:root {
+  font-family: Inter, system-ui, Avenir, Helvetica, Arial, sans-serif;
+  line-height: 1.5;
+  font-weight: 400;
+
+  font-synthesis: none;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+h1 {
+  font-size: 46px;
+  width: 96%;
+  max-width: 860px;
+
+  margin-left: auto;
+  margin-right: auto;
+
+  text-align: left;
+  /* border-top: 1px solid #333;
+  border-bottom: 1px solid #333; */
+  margin-top: 100px;
+  font-weight: 500;
+  line-height: 1.1;
+}
+
+#svg-container {
+  /* border: 1px solid red; */
+  width: 96%;
+  max-width: 860px;
+  height: 520px;
+  margin-left: auto;
+  margin-right: auto;
+}
