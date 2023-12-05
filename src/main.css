@@ -10,7 +10,7 @@
 }
 
 h1 {
-  font-size: 46px;
+  font-size: 52px;
   width: 96%;
   max-width: 860px;
 
@@ -21,15 +21,19 @@ h1 {
   /* border-top: 1px solid #333;
   border-bottom: 1px solid #333; */
   margin-top: 100px;
-  font-weight: 500;
+  font-weight: 400;
   line-height: 1.1;
+}
+
+h1 span {
+  color: #aaa;
 }
 
 #svg-container {
   /* border: 1px solid red; */
   width: 96%;
   max-width: 860px;
-  height: 520px;
+  height: 540px;
   margin-left: auto;
   margin-right: auto;
 }
