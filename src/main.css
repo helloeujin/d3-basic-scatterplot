@@ -11,8 +11,8 @@
 
 h1 {
   font-size: 52px;
-  width: 96%;
-  max-width: 860px;
+  width: 98%;
+  max-width: 900px;
 
   margin-left: auto;
   margin-right: auto;
@@ -31,9 +31,15 @@ h1 span {
 
 #svg-container {
   /* border: 1px solid red; */
-  width: 96%;
-  max-width: 860px;
+  width: 98%;
+  max-width: 900px;
   height: 540px;
   margin-left: auto;
   margin-right: auto;
 }
+
+/* @media (max-width: 800px) {
+  #svg-container {
+    height: 820px;
+  }
+} */

@@ -8,7 +8,7 @@ const svg = d3.select("#svg-container").append("svg").attr("id", "svg");
 
 let width = parseInt(d3.select("#svg-container").style("width"));
 let height = parseInt(d3.select("#svg-container").style("height"));
-const margin = { top: 20, right: 30, bottom: 40, left: 30 };
+const margin = { top: 25, right: 20, bottom: 60, left: 70 };
 
 // parsing & formatting
 const formatXAxis = d3.format("~s"); //숫자를 간결하게 표현하기 위한 포매팅 방식 (K, M)
@@ -29,8 +29,14 @@ const xAxis = d3
 
 const yAxis = d3.axisLeft(yScale).ticks(5);
 
+//  tooltip
+const tooltip = d3
+  .select("#svg-container")
+  .append("div")
+  .attr("class", "tooltip");
+
 // svg elements
-let circles;
+let circles, xUnit, yUnit, legendRects, legendTexts;
 
 ////////////////////////////////////////////////////////////////////
 ////////////////////////////  Load CSV  ////////////////////////////
@@ -80,7 +86,55 @@ d3.csv("/data/gapminder_combined.csv")
       .attr("cy", (d) => yScale(d.life_expectancy))
       .attr("r", (d) => radiusScale(d.population))
       .attr("fill", (d) => colorScale(d.region))
-      .attr("stroke", "#fff");
+      .attr("stroke", "#fff")
+      .on("mousemove", function (event, d, index) {
+        tooltip
+          .style("left", event.pageX + 0 + "px")
+          .style("top", event.pageY - 52 + "px")
+          .style("display", "block")
+          .html(`${d.country}`);
+
+        d3.select(this).style("stroke-width", 3).attr("stroke", "#111");
+      })
+      .on("mouseout", function () {
+        tooltip.style("display", "none");
+        d3.select(this).style("stroke-width", 1).attr("stroke", "#fff");
+      });
+
+    // Units
+    xUnit = svg
+      .append("text")
+      .attr("transform", `translate(${width / 2}, ${height - 10})`)
+      .text("GDP per capita")
+      .attr("class", "unit");
+
+    yUnit = svg
+      .append("text")
+      .attr("transform", "translate(20," + height / 2 + ") rotate(-90)")
+      .text("Life expectancy")
+      .attr("class", "unit");
+
+    // Legend
+    legendRects = svg
+      .selectAll("legend-rects")
+      .data(region)
+      .enter()
+      .append("rect")
+      .attr("x", (d, i) => width - margin.right - 83)
+      .attr("y", (d, i) => height - margin.bottom - 70 - 25 * i)
+      .attr("width", 12)
+      .attr("height", 17)
+      .attr("fill", (d) => colorScale(d));
+
+    legendTexts = svg
+      .selectAll("legend-texts")
+      .data(region)
+      .enter()
+      .append("text")
+      .attr("x", (d, i) => width - margin.right - 83 + 20)
+      .attr("y", (d, i) => height - margin.bottom - 70 - 25 * i + 15)
+      .text((d) => d)
+      .attr("class", "legend-texts");
   })
   .catch((error) => {
     console.error("Error loading CSV data: ", error);
@@ -111,4 +165,17 @@ window.addEventListener("resize", () => {
     .attr("cx", (d) => xScale(d.income))
     .attr("cy", (d) => yScale(d.life_expectancy))
     .attr("r", (d) => radiusScale(d.population));
+
+  // units updated
+  xUnit.attr("transform", `translate(${width / 2}, ${height - 10})`);
+  yUnit.attr("transform", "translate(20," + height / 2 + ") rotate(-90)");
+
+  //  legend updated
+  legendRects
+    .attr("x", (d, i) => width - margin.right - 83)
+    .attr("y", (d, i) => height - margin.bottom - 70 - 25 * i);
+
+  legendTexts
+    .attr("x", (d, i) => width - margin.right - 83 + 20)
+    .attr("y", (d, i) => height - margin.bottom - 70 - 25 * i + 15);
 });
