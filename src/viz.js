@@ -43,7 +43,7 @@ let circles, xUnit, yUnit, legendRects, legendTexts;
 let data = [];
 let region;
 
-d3.csv("/data/gapminder_combined.csv")
+d3.csv("data/gapminder_combined.csv")
   .then((raw_data) => {
     // data parsing
     data = raw_data.map((d) => {
