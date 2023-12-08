@@ -30,6 +30,10 @@ const xAxis = d3
 const yAxis = d3.axisLeft(yScale).ticks(5);
 
 //  tooltip
+const tooltip = d3
+  .select("#svg-container")
+  .append("div")
+  .attr("class", "tooltip");
 
 // svg elements
 let circles, xUnit, yUnit, legendRects, legendTexts;
@@ -82,7 +86,20 @@ d3.csv("data/gapminder_combined.csv")
       .attr("cy", (d) => yScale(d.life_expectancy))
       .attr("r", (d) => radiusScale(d.population))
       .attr("fill", (d) => colorScale(d.region))
-      .attr("stroke", "#fff");
+      .attr("stroke", "#fff")
+      .on("mousemove", function (event, d, index) {
+        tooltip
+          .style("left", event.pageX + 0 + "px")
+          .style("top", event.pageY - 52 + "px")
+          .style("display", "block")
+          .html(`${d.country}`);
+
+        d3.select(this).style("stroke-width", 3).attr("stroke", "#111");
+      })
+      .on("mouseout", function () {
+        tooltip.style("display", "none");
+        d3.select(this).style("stroke-width", 1).attr("stroke", "#fff");
+      });
 
     // Units
     xUnit = svg
@@ -122,3 +139,43 @@ d3.csv("data/gapminder_combined.csv")
   .catch((error) => {
     console.error("Error loading CSV data: ", error);
   });
+
+////////////////////////////////////////////////////////////////////
+////////////////////////////  Resize  //////////////////////////////
+window.addEventListener("resize", () => {
+  //  width, height updated
+  width = parseInt(d3.select("#svg-container").style("width"));
+  height = parseInt(d3.select("#svg-container").style("height"));
+
+  //  scale updated
+  xScale.range([margin.left, width - margin.right]);
+  yScale.range([height - margin.bottom, margin.top]);
+
+  //  axis updated
+  d3.select(".x-axis")
+    .attr("transform", `translate(0,${height - margin.bottom})`)
+    .call(xAxis);
+
+  d3.select(".y-axis")
+    .attr("transform", `translate(${margin.left}, 0)`)
+    .call(yAxis);
+
+  // circles updated
+  circles
+    .attr("cx", (d) => xScale(d.income))
+    .attr("cy", (d) => yScale(d.life_expectancy))
+    .attr("r", (d) => radiusScale(d.population));
+
+  // units updated
+  xUnit.attr("transform", `translate(${width / 2}, ${height - 10})`);
+  yUnit.attr("transform", "translate(20," + height / 2 + ") rotate(-90)");
+
+  //  legend updated
+  legendRects
+    .attr("x", (d, i) => width - margin.right - 83)
+    .attr("y", (d, i) => height - margin.bottom - 70 - 25 * i);
+
+  legendTexts
+    .attr("x", (d, i) => width - margin.right - 83 + 20)
+    .attr("y", (d, i) => height - margin.bottom - 70 - 25 * i + 15);
+});
