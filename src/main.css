@@ -29,15 +29,6 @@ h1 span {
   color: #aaa;
 }
 
-#svg-container {
-  /* border: 1px solid red; */
-  width: 98%;
-  max-width: 900px;
-  height: 540px;
-  margin-left: auto;
-  margin-right: auto;
-}
-
 /* @media (max-width: 800px) {
   #svg-container {
     height: 820px;
